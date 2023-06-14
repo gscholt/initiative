@@ -1,0 +1,177 @@
+:root {
+	--touch-size: 48px;
+	--touch-spacing: 8px;
+	--touch-button-height: 36px;
+	--touch-button-margin: 6px; /* FIXME: better name -- padding? */
+	/* https://material.io/tools/color Blue 300 */
+	--primary: #64b5f6;
+	--primary-text: #000000;
+	--primary-light: #9be7ff;
+	--primary-dark: #2286c3;
+	/* https://material.io/tools/color Purple 300 */
+	--secondary: #ba68c8;
+	--secondary-a2: rgba(186, 104, 200, 0.2);
+	--secondary-a3: rgba(186, 104, 200, 0.3);
+	--secondary-a7: rgba(186, 104, 200, 0.7);
+	--secondary-a8: rgba(186, 104, 200, 0.8);
+	--secondary-text: #000000;
+	--secondary-light: #ee98fb;
+	--secondary-dark: #883997;
+	--divider: rgba(0,0,0,0.12);
+	/* box-shadow */
+	--elevation-1dp: 0 1px 1px 0 rgba(0,0,0,0.14), 0 2px 1px -1px rgba(0,0,0,0.12), 0 1px 3px 0 rgba(0,0,0,0.20);
+	--elevation-2dp: 0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.20);
+	--elevation-4dp: 0 4px 5px 0 rgba(0,0,0,0.14), 0 1px 10px 0 rgba(0,0,0,0.12), 0 2px 4px -1px rgba(0,0,0,0.20);
+	--elevation-8dp: 0 8px 10px 1px rgba(0,0,0,0.14), 0 3px 14px 2px rgba(0,0,0,0.12), 0 5px 5px -3px rgba(0,0,0,0.20);
+	--elevation-16dp: 0 16px 24px 2px rgba(0,0,0,0.14), 0 6px 30px 5px rgba(0,0,0,0.12), 0 8px 10px -5px rgba(0,0,0,0.20);
+	--elevation-24dp: 0 24px 38px 3px rgba(0,0,0,0.14), 0 9px 46px 8px rgba(0,0,0,0.12), 0 11px 15px -7px rgba(0,0,0,0.20);
+	/* Radius */
+	--radius-small: 2px;
+	--radius-big: 4px;
+}
+
+html {
+	font-family: Roboto, sans-serif;
+	-moz-osx-font-smoothing: grayscale;
+	-webkit-font-smoothing: antialiased;
+}
+
+body {
+	background: white;
+	display: flex;
+	min-height: 100vh;
+	margin: 0;
+	flex-direction: column;
+}
+
+header {
+	height: var(--touch-size);
+	display: flex;
+	color: var(--primary-text);
+	background-color: var(--primary);
+	position: relative;
+	z-index: 4;
+	box-shadow: var(--elevation-4dp);
+}
+header>* {
+	display: flex;
+	justify-content: center;
+	margin-left: var(--touch-size);
+}
+
+main {
+	flex: 1;
+}
+
+footer {
+	padding-top: 1em;
+	background: var(--primary);
+	box-shadow: var(--elevation-8dp);
+	z-index: 8;
+	display: flex;
+	padding: var(--touch-button-margin);
+}
+footer > * {
+	flex: 0;
+}
+
+button {
+	height: var(--touch-button-height);
+	min-width: 64px; /* FIXME */
+	padding-left: calc(2 * var(--touch-spacing));
+	padding-right: calc(2 * var(--touch-spacing));
+	border: 0;
+	outline: 0;
+	border-radius: var(--radius-big);
+}
+
+button.contained {
+	background: var(--secondary);
+	color: var(--secondary-text);
+	z-index: 2;
+	box-shadow: var(--elevation-2dp);
+}
+button.contained:hover,
+button.contained:focus { background: var(--secondary-a8) }
+button.contained:active { background: var(--secondary-a7) }
+button.contained:disabled,
+button.contained:disabled:hover,
+button.contained:disabled:focus,
+button.contained:disabled:active {
+	background: rgba(0,0,0,0.2);
+	color: rgba(0,0,0,0.4);
+	z-index: 0;
+	box-shadow: none;
+}
+
+button.outline {
+	background: transparent;
+	color: var(--secondary);
+	border: 1px solid var(--divider);
+}
+button.outline:hover,
+button.outline:focus { background: var(--secondary-a2) }
+button.outline:active { background: var(--secondary-a3) }
+button.outline:disabled,
+button.outline:disabled:hover,
+button.outline:disabled:focus,
+button.outline:disabled:active {
+	color: rgba(0,0,0,0.4);
+	background: transparent;
+}
+
+button.text {
+	background: transparent;
+	color: var(--secondary);
+	padding-left: var(--touch-spacing);
+	padding-right: var(--touch-spacing);
+}
+button.text:hover,
+button.text:focus { background: var(--secondary-a2) }
+button.text:active { background: var(--secondary-a3) }
+button.text:disabled,
+button.text:disabled:hover,
+button.text:disabled:focus,
+button.text:disabled:active {
+	color: rgba(0,0,0,0.4);
+	background: transparent;
+}
+button.icon {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+button.icon .material-icons {
+	margin-right: var(--touch-spacing);
+}
+
+button.action {
+	background: transparent;
+	min-width: var(--touch-button-height);
+	padding: 0;
+	border-radius: 50%;
+}
+
+button {
+	font-family: Roboto, sans-serif;
+	-moz-osx-font-smoothing: grayscale;
+	-webkit-font-smoothing: antialiased;
+	font-size: 0.875rem;
+	line-height: 2.25rem;
+	font-weight: 500;
+	letter-spacing: 0.08929em;
+	text-decoration: none;
+	text-transform: uppercase;
+}
+
+header, header>* {
+	font-family: Roboto, sans-serif;
+	-moz-osx-font-smoothing: grayscale;
+	-webkit-font-smoothing: antialiased;
+	font-size: 1.25rem;
+	line-height: 2rem;
+	font-weight: 500;
+	letter-spacing: 0.0125em;
+	text-decoration: inherit;
+	text-transform: inherit;
+}

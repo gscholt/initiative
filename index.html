@@ -1,1 +1,545 @@
-<h1>Test</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8"/>
+	<title>Initiative tracker</title>
+	<meta name="description" content="Initiative Tracker, RPG, DnD, Dungeons and Dragons">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+	<!-- https://favicon.io/favicon-generator/?t=It&ff=Leckerli+One&fs=110&fc=%23FFFFFF&b=circle&bc=%23209CEE -->
+	<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+	<!-- Main code -->
+	<style>
+html {
+	background: #F0F0F0;
+}
+div.tbl-wrap {
+	background: white;
+	border-radius: 4px;
+	margin-bottom: 4px;
+	box-shadow: var(--elevation-1dp);
+}
+header {
+	white-space: nowrap;
+	font-size: 36px;
+	font-weight: bold;
+	margin-top: 8px;
+	margin-bottom: 8px;
+	text-align: center;
+}
+header, div.tbl-wrap {
+	width: 100%;
+}
+.tbl {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+.row, .ctrl, header, div.tbl-wrap {
+	max-width: 500px;
+}
+.row {
+	display: flex;
+}
+.row-init {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: var(--unit-big);
+	width: var(--unit-big);
+	font-size: 22px;
+}
+.row-icon {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	font-size: 22px;
+}
+.row-desc {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+.row-del {
+}
+#tbl-active:empty::after {
+	content: "None with initiative";
+	align-self: center;
+	position: relative;
+	top: calc(22px / 2 + 2px);
+	height: 0px;
+	font-size: 22px;
+}
+#tbl-active .row-del {
+	display: none;
+}
+.row {
+	border-radius: 4px;
+}
+.ctrl, .row {
+	padding-top: var(--unit-border);
+	padding-bottom: var(--unit-border);
+}
+.row-cur, .row-cur > * > input {
+	background: #90CAF9;
+}
+.ctrl {
+	display: flex;
+	padding: 4px;
+}
+#ctrl-nxt {
+	width: calc(2 * var(--unit-small));
+}
+#ctrl-round {
+	flex: 2;
+	display: flex;
+	align-items: center;
+	padding-left: 8px;
+	padding-right: 8px;
+	white-space: nowrap;
+}
+.ctrl .spacer {
+	width: calc(var(--unit-big) + 2 * var(--unit-border));
+}
+.row {
+	position: relative;
+}
+.row-menu-wrapper {
+	height: auto;
+	width: auto;
+	max-width: var(--column-width);
+	min-width: 320px;
+	visibility: hidden;
+}
+.row-menu {
+	background: white;
+	height: 100%;
+	width: 100%;
+}
+.row-menu > * {
+	display: flex;
+}
+.row-menu > * > input {
+	flex: 1;
+}
+.row-menu-scrim {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: rgba(0,0,0,0.32);
+	visibility: hidden;
+	opacity: 0;
+}
+.row-menu-show,
+.row-menu-show ~ .row-menu-scrim {
+	visibility: visible;
+	opacity: 1;
+	transition: all 0.3s;
+}
+/* Implementation for menu */
+.row-menu-wrapper {
+	z-index: 8;
+}
+.row-menu {
+	box-shadow: var(--elevation-8dp);
+}
+.row-menu-scrim {
+	z-index: 7;
+}
+.menu-ctrl {
+	display: flex;
+	padding: 4px;
+	align-items: center;
+	justify-content: flex-end;
+}
+@media (max-width: 500px) {
+	.row-menu-wrapper {
+		position: fixed;
+		left: 0;
+		right: 0;
+		bottom: 0;
+	}
+	.row-menu {
+		opacity: 0;
+		transform: translateY(100%);
+		border-radius: 20px 20px 0 0;
+	}
+	.row-menu > :first-child {
+		padding-top: 16px;
+	}
+	.row-menu > * {
+		padding-left: 16px;
+		padding-right: 16px;
+	}
+	.row-menu > :last-child {
+		padding-bottom: 8px;
+	}
+	.row-menu-show .row-menu {
+		opacity: 1;
+		transform: translateY(0);
+		transition: all 0.3s;
+	}
+}
+@media (min-width: 501px) {
+	.row-menu-wrapper {
+		position: absolute;
+		right: -8px;
+		top: -8px;
+	}
+	.row-menu {
+		opacity: 0;
+		transform: scale(0.7);
+		border-radius: 8px;
+	}
+	.row-menu > :first-child {
+		padding-top: 8px;
+	}
+	.row-menu > * {
+		padding-left: 8px;
+		padding-right: 8px;
+	}
+	.row-menu > :last-child {
+		padding-bottom: 8px;
+	}
+	.row-menu-wrapper.row-menu-show .row-menu {
+		opacity: 1;
+		transform: scale(1);
+		transition: all 0.3s;
+	}
+	.row-menu-scrim {
+		opacity: 0!important;
+	}
+}
+/* Implementation for menu */
+body {
+	font-family: 'Roboto', sans-serif;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	margin: 4px;
+}
+/*******/
+:root {
+	--unit-big: 44px;
+	--unit-small: 36px;
+	--unit-border: 2px;
+	--elevation-1dp: 0 1px 1px 0 rgba(0,0,0,0.14), 0 2px 1px -1px rgba(0,0,0,0.12), 0 1px 3px 0 rgba(0,0,0,0.20);
+	--elevation-8dp: 0 8px 10px 1px rgba(0,0,0,0.14), 0 3px 14px 2px rgba(0,0,0,0.12), 0 5px 5px -3px rgba(0,0,0,0.20);
+	--column-width: 500px;
+}
+.row button { min-height: var(--unit-big); min-width: var(--unit-big) }
+.ctrl button { min-height: var(--unit-big); min-width: var(--unit-big) }
+input {
+	font-family: 'Roboto', sans-serif;
+	border: 0;
+	height: var(--unit-small);
+	margin: var(--unit-border);
+	padding: var(--unit-border);
+	font-size: 22px;
+}
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+	-webkit-appearance: none; 
+	margin: 0; 
+}
+.row-init { height: var(--unit-big); width: var(--unit-big) }
+.row-init input {
+	width: var(--unit-small);
+	text-align: center;
+}
+.row-desc input {
+	height: 100%;
+	width: 100%;
+	padding-top: 0;
+	padding-bottom: 0;
+	margin: 0;
+	max-height: calc(var(--unit-small) + 2 * var(--unit-border));
+}
+.row-desc span {
+	font-size: 14px;
+	color: rgba(0,0,0,.6);
+	padding-left: var(--unit-border);
+}
+button.round {
+	border-radius: 50%;
+	border: 0;
+	background: 0;
+	user-select: none;
+	cursor: pointer;
+	outline: none!important;
+}
+button.round:hover {
+	background: rgba(1,1,1,.1);
+}
+/*******/
+	</style>
+	<script>
+document.addEventListener('DOMContentLoaded', () => {
+	let round = 0;
+	let changedQueue = null;
+	let tblActive = document.getElementById('tbl-active');
+	let tblPassive = document.getElementById('tbl-passive');
+	let ctrlNxt = document.getElementById('ctrl-nxt');
+	let ctrlPrv = document.getElementById('ctrl-prv');
+	let ctrlRound = document.getElementById('ctrl-round');
+	let ctrlAdd = document.getElementById('ctrl-add');
+	let ctrlReset = document.getElementById('ctrl-reset');
+	let tmplRow = document.getElementById('tmpl-row');
+	load();
+	onChanged();
+
+	ctrlNxt.addEventListener('click', () => {
+		let row = rowFindCur();
+		if(row) {
+			row.classList.toggle('row-cur');
+			row = row.nextElementSibling;
+		}
+		if(!row) {
+			round++;
+			row = tblActive.children[0];
+		}
+		row.classList.toggle('row-cur');
+		updateCtrl();
+	});
+
+	ctrlPrv.addEventListener('click', () => {
+		let row = rowFindCur();
+		if(row) {
+			row.classList.toggle('row-cur');
+			row = row.previousElementSibling;
+		}
+		if(!row) {
+			round--;
+			row = tblActive.children[tblActive.children.length-1];
+		}
+
+		if(round) row.classList.toggle('row-cur');
+		updateCtrl();
+	});
+
+	ctrlAdd.addEventListener('click', () => {
+		let row = rowNew();
+		sortTbl(tblPassive);
+		row.querySelector('.row-desc input').focus();
+	});
+
+	ctrlReset.addEventListener('click', () => {
+		round = 0;
+		let row = rowFindCur();
+		if(row) row.classList.toggle('row-cur');
+
+		while(tblActive.children.length) {
+			let row = tblActive.children[0];
+			row.querySelector('.row-init input').value = '';
+			tblPassive.appendChild(row);
+		}
+		sortTbl(tblPassive);
+
+		onChanged();
+	});
+
+	function load() {
+		let data = JSON.parse(window.localStorage.getItem('initiative-tracker-data') || '{}');
+		if(!data.participants) return;
+		for(let p of data.participants) {
+			rowNew(p.init, p.icon, p.name, p.desc);
+		}
+		sortTbl(tblActive);
+		sortTbl(tblPassive);
+	}
+
+	function save() {
+		let participants = [];
+		for(let tbl of [tblActive, tblPassive]) {
+			for(let row of tbl.children) {
+				let init = row.querySelector('.row-init input').value;
+				let icon = row.querySelector('.row-icon').innerText;
+				let name = row.querySelector('.row-desc input').value;
+				let desc = row.querySelector('.row-desc span').innerText;
+				participants.push({init, icon, name, desc});
+			}
+		}
+		let data = {participants};
+		window.localStorage.setItem('initiative-tracker-data', JSON.stringify(data));
+	}
+
+	function rowNew(init, icon, name, desc) {
+		let row = tmplRow.cloneNode(true);
+		row.id = '';
+		row.querySelector('.row-init input').value = init === undefined ? "" : init;
+		row.querySelector('.row-icon').innerText = icon === undefined ? "" : icon;
+		row.querySelector('.row-desc input').value = name === undefined ? "" : name;
+		row.querySelector('.row-desc span').innerText = desc == undefined ? "" : desc;
+		let tbl = init == '' || init === undefined ? tblPassive : tblActive;
+		tbl.appendChild(row);
+		row.querySelector('input').addEventListener('focus', ev => {
+			ev.target.select();
+		});
+		row.querySelector('.row-init input').addEventListener('change', ev => {
+			onInitChanged(true);
+		});
+		row.querySelector('.row-desc input').addEventListener('change', ev => {
+			onNameChanged();
+		});
+		row.querySelector('.row-del button').addEventListener('click', ev => {
+			onRowDel(true);
+		});
+		row.querySelector('.row-more button').addEventListener('click', ev => {
+			showRowMenu(row);
+		});
+		row.querySelector('.row-menu-scrim').addEventListener('click', ev => {
+			hideRowMenu(row);
+		});
+		row.querySelector('.menu-init input').addEventListener('change', ev => {
+			row.querySelector('.row-init input').value = row.querySelector('.menu-init input').value;
+			onInitChanged(false);
+		});
+		row.querySelector('.menu-init button').addEventListener('click', ev => {
+			if(row.querySelector('.menu-init input').value == '') return;
+			row.querySelector('.menu-init input').value = '';
+			row.querySelector('.row-init input').value = '';
+			onInitChanged(false);
+		});
+		row.querySelector('.menu-icon input').addEventListener('change', ev => {
+			row.querySelector('.row-icon').innerText = row.querySelector('.menu-icon input').value;
+			onChanged();
+		});
+		row.querySelector('.menu-name input').addEventListener('change', ev => {
+			row.querySelector('.row-desc input').value = row.querySelector('.menu-name input').value;
+			onNameChanged();
+		});
+		row.querySelector('.menu-desc input').addEventListener('change', ev => {
+			row.querySelector('.row-desc span').innerText = row.querySelector('.menu-desc input').value;
+			onChanged();
+		});
+		row.querySelector('.menu-ctrl-del').addEventListener('click', ev => {
+			onRowDel(false);
+		});
+
+		function onInitChanged(refocus) {
+			let tbl = row.querySelector('.row-init input').value == '' ? tblPassive : tblActive;
+			let rowNext = row.nextElementSibling || row.previousElementSibling;
+			tbl.appendChild(row);
+			sortTbl(tbl);
+			if(refocus && rowNext) rowNext.querySelector('.row-init input').focus();
+			onChanged();
+		}
+		function onNameChanged() {
+			sortTbl(row.parentElement);
+			onChanged();
+		}
+		function onRowDel(ask) {
+			let name = row.querySelector('.row-desc input').value;
+			if(!ask || name == "" || window.confirm(`Remove '${name}'?`)) {
+				row.remove();
+				onChanged();
+			}
+		}
+
+		onChanged();
+		return row;
+	}
+	function showRowMenu(row) {
+		row.querySelector('.row-menu-wrapper').classList.add('row-menu-show');
+		row.querySelector('.menu-init input').value = row.querySelector('.row-init input').value;
+		row.querySelector('.menu-icon input').value = row.querySelector('.row-icon').innerText;
+		row.querySelector('.menu-name input').value = row.querySelector('.row-desc input').value;
+		row.querySelector('.menu-desc input').value = row.querySelector('.row-desc span').innerText;
+	}
+	function hideRowMenu(row) {
+			row.querySelector('.row-menu-wrapper').classList.remove('row-menu-show');
+	}
+
+	function rowFindCur() {
+		for(let i = 0; i < tblActive.children.length; i++) {
+			let row = tblActive.children[i];
+			if(row.classList.contains('row-cur')) return row;
+		}
+		return null;
+	}
+
+	function onChanged() {
+		if(changedQueue) return;
+		changedQueue = setTimeout(() => {
+			changedQueue = null;
+			save();
+			updateCtrl();
+		});
+	}
+	function updateCtrl() {
+			ctrlNxt.disabled = tblActive.children.length == 0;
+			ctrlPrv.disabled = !rowFindCur();
+			ctrlRound.innerText = round ? `Round ${round}` : '';
+			ctrlReset.disabled = tblActive.children.length == 0;
+	}
+
+	function sortTbl(tbl) {
+		let rows = [];
+		for(let row of tbl.children) rows.push(row);
+		rows.sort((rowA, rowB) => {
+			let initA = parseInt(rowA.querySelector('.row-init input').value, 10);
+			let initB = parseInt(rowB.querySelector('.row-init input').value, 10);
+			if(initA > initB) return -1;
+			if(initA < initB) return +1;
+			let nameA = rowA.querySelector('.row-desc input').value;
+			let nameB = rowB.querySelector('.row-desc input').value;
+			if(nameA < nameB) return -1;
+			if(nameA > nameB) return +1;
+			return 0;
+		});
+		for(let row of rows) tbl.appendChild(row);
+	}
+});
+	</script>
+</head>
+<body>
+	<header>Initiative tracker</header>
+	<!--<button style="float: right" class="round material-icons">help_outline</button>-->
+	<div class="tbl-wrap">
+		<div id="tbl-active" class="tbl"></div>
+		<div class="ctrl">
+			<button id="ctrl-nxt" class="material-icons" title="Next">arrow_downward</button>
+			<button id="ctrl-prv" class="material-icons" title="Previous">arrow_upward</button>
+			<div id="ctrl-round"></div>
+			<button id="ctrl-reset" class="material-icons" title="Reset all initiatives">refresh</button>
+			<div class="spacer"></div>
+			<button id="ctrl-add" class="material-icons" title="Add new">add</button>
+		</div>
+	</div>
+	<div class="tbl-wrap">
+		<div id="tbl-passive" class="tbl"></div>
+		<div id="tmpl" style="display:none">
+			<div id="tmpl-row" class="row">
+				<div class="row-init"><input type="number" placeholder="-"></div>
+				<div class="row-icon"></div>
+				<div class="row-desc"><input type="text" placeholder="Unnamed"><span><!--description--!></span></div>
+				<div class="row-del"><button class="round material-icons" title="Delete">delete</button></div>
+				<div class="row-more"><button class="round material-icons" title="Open Menu">more_vert</button></div>
+				<div class="row-menu-wrapper">
+					<div class="row-menu">
+						<div class="menu-init">
+							<input type="number" placeholder="Initiative">
+							<button class="round material-icons" title="Reset initiative">refresh</button>
+						</div>
+						<div class="menu-icon">
+							<input type="text" placeholder="Type / Group / Emoji">
+							<!--<button class="round material-icons" title="Browse example emoji" disabled>insert_emoticon</button>-->
+						</div>
+						<div class="menu-name"><input type="text" placeholder="Name"></div>
+						<div class="menu-desc"><input type="text" placeholder="Description"></div>
+						<div class="menu-ctrl">
+							<button class="menu-ctrl-del round material-icons" title="Delete">delete</button>
+						</div>
+					</div>
+				</div>
+				<div class="row-menu-scrim"></div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
